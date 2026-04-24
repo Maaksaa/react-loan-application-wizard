@@ -1,8 +1,19 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import PersonalDataPage from '@/pages/PersonalDataPage'
+import AddressPage from '@/pages/AddressPage'
+import LoanPage from '@/pages/LoanPage'
+
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
-      <h1 className="text-3xl font-bold text-slate-900">Loan Application</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/personal" replace />} />
+        <Route path="/personal" element={<PersonalDataPage />} />
+        <Route path="/address" element={<AddressPage />} />
+        <Route path="/loan" element={<LoanPage />} />
+        <Route path="*" element={<Navigate to="/personal" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
