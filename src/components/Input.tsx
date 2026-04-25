@@ -6,6 +6,10 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string
 }
 
+/**
+ * Controlled/uncontrolled-agnostic text input.
+ * forwardRef is required for react-hook-form's register() to attach.
+ */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, id, className, ...props }, ref) => {
     const inputId = id ?? props.name

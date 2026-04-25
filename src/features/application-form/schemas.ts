@@ -1,5 +1,9 @@
 import { z } from 'zod'
 
+/**
+ * Phone format per task: 0XXX XXX XXX
+ * Stored as raw digits during typing, validated as final masked form.
+ */
 const phoneRegex = /^0\d{3} \d{3} \d{3}$/
 
 export const personalSchema = z.object({
@@ -30,6 +34,7 @@ export const loanSchema = z.object({
     .max(30, 'Max 30 days'),
 })
 
+// Inferring types straight from schemas — single source of truth
 export type PersonalInput = z.infer<typeof personalSchema>
 export type AddressInput = z.infer<typeof addressSchema>
 export type LoanInput = z.infer<typeof loanSchema>

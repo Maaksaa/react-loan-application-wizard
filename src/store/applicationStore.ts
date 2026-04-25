@@ -1,5 +1,14 @@
 import { create } from 'zustand'
 
+/**
+ * Application form state shared across the 3 steps.
+ *
+ * All fields are optional at the store level: a user might land on step 2
+ * while step 1 is still in progress (e.g. refilling data after "Back").
+ * Per-step validation is enforced by Zod schemas in each form,
+ * so the store itself stays as a dumb data bag.
+ */
+
 export type Gender = 'male' | 'female'
 
 export interface PersonalData {
