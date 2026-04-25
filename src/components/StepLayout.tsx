@@ -1,4 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { StepIndicator } from './StepIndicator'
 
 interface StepLayoutProps {
@@ -9,10 +11,9 @@ interface StepLayoutProps {
 }
 
 export function StepLayout({ step, title, subtitle, children }: StepLayoutProps) {
+  const { t } = useTranslation()
   const headingRef = useRef<HTMLHeadingElement>(null)
 
-  // Move focus to the step heading when the step changes — better keyboard
-  // and screen reader experience than letting focus stay on the previous Next button.
   useEffect(() => {
     headingRef.current?.focus()
   }, [step])
@@ -20,6 +21,9 @@ export function StepLayout({ step, title, subtitle, children }: StepLayoutProps)
   return (
     <div className="min-h-screen bg-slate-50 py-10">
       <div className="mx-auto w-full max-w-md px-4">
+        <div className="mb-4 flex justify-end">
+          <LanguageSwitcher />
+        </div>
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/60 sm:p-8">
           <StepIndicator current={step} />
           <h1
@@ -33,9 +37,7 @@ export function StepLayout({ step, title, subtitle, children }: StepLayoutProps)
           {!subtitle && <div className="mb-6" />}
           {children}
         </div>
-        <p className="mt-4 text-center text-xs text-slate-400">
-          Wiam Group · Test loan application
-        </p>
+        <p className="mt-4 text-center text-xs text-slate-400">{t('app.title')}</p>
       </div>
     </div>
   )

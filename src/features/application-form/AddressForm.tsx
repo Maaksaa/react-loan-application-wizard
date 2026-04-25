@@ -1,17 +1,21 @@
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { Select } from '@/components/Select'
 import { useApplicationStore } from '@/store/applicationStore'
-import { addressSchema, type AddressInput } from './schemas'
+import { buildAddressSchema, type AddressInput } from './schemas'
 import { useCategories } from './useCategories'
 
 export function AddressForm() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const savedAddress = useApplicationStore((s) => s.addressInfo)
   const setAddress = useApplicationStore((s) => s.setAddress)
+  const schema = useMemo(() => buildAddressSchema(t), [t])
 
   const { data: categories, isLoading, isError, refetch } = useCategories()
 
@@ -20,7 +24,7 @@ export function AddressForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AddressInput>({
-    resolver: zodResolver(addressSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       workplace: savedAddress.workplace ?? '',
       address: savedAddress.address ?? '',
@@ -33,12 +37,10 @@ export function AddressForm() {
     navigate('/loan')
   }
 
-  // Render states for the categories fetch — we don't block the whole form,
-  // only the dependent field.
   if (isLoading) {
     return (
       <div className="flex h-40 items-center justify-center text-sm text-slate-500">
-        Loading workplaces…
+        {t('address.loading')}
       </div>
     )
   }
@@ -46,9 +48,9 @@ export function AddressForm() {
   if (isError || !categories) {
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-sm">
-        <p className="text-red-600">Failed to load workplaces.</p>
+        <p className="text-red-600">{t('address.loadError')}</p>
         <Button variant="secondary" onClick={() => refetch()}>
-          Try again
+          {t('actions.retry')}
         </Button>
       </div>
     )
@@ -57,15 +59,15 @@ export function AddressForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
       <Select
-        label="Workplace"
-        placeholder="Select workplace"
+        label={t('address.workplace')}
+        placeholder={t('address.workplacePlaceholder')}
         options={categories}
         {...register('workplace')}
         error={errors.workplace?.message}
       />
 
       <Input
-        label="Residential address"
+        label={t('address.residence')}
         autoComplete="street-address"
         {...register('address')}
         error={errors.address?.message}
@@ -73,10 +75,10 @@ export function AddressForm() {
 
       <div className="mt-2 flex gap-3">
         <Button variant="secondary" className="flex-1" onClick={() => navigate('/personal')}>
-          Back
+          {t('actions.back')}
         </Button>
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          Next
+          {t('actions.next')}
         </Button>
       </div>
     </form>

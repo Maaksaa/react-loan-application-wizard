@@ -1,16 +1,19 @@
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/cn'
 
 interface StepIndicatorProps {
   current: 1 | 2 | 3
 }
 
-const steps = [
-  { num: 1, label: 'Personal' },
-  { num: 2, label: 'Address' },
-  { num: 3, label: 'Loan' },
-] as const
-
 export function StepIndicator({ current }: StepIndicatorProps) {
+  const { t } = useTranslation()
+
+  const steps = [
+    { num: 1, label: t('progress.personal') },
+    { num: 2, label: t('progress.address') },
+    { num: 3, label: t('progress.loan') },
+  ] as const
+
   return (
     <nav aria-label="Form progress" className="mb-8">
       <ol className="flex items-center gap-2">

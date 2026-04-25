@@ -1,40 +1,48 @@
 import { z } from 'zod'
+import type { TFunction } from 'i18next'
 
-/**
- * Phone format per task: 0XXX XXX XXX
- * Stored as raw digits during typing, validated as final masked form.
- */
 const phoneRegex = /^0\d{3} \d{3} \d{3}$/
 
-export const personalSchema = z.object({
-  phone: z.string().min(1, 'Phone is required').regex(phoneRegex, 'Phone must match 0XXX XXX XXX'),
-  firstName: z.string().min(1, 'First name is required').max(50, 'Too long'),
-  lastName: z.string().min(1, 'Last name is required').max(50, 'Too long'),
-  gender: z.enum(['male', 'female'], {
-    message: 'Gender is required',
-  }),
-})
+/**
+ * Schema factories take t() so error messages are localized at validation time,
+ * not at module load time. Each form rebuilds its schema via useMemo bound to
+ * the active language.
+ */
 
-export const addressSchema = z.object({
-  workplace: z.string().min(1, 'Workplace is required'),
-  address: z.string().min(1, 'Address is required').max(200, 'Too long'),
-})
+export const buildPersonalSchema = (t: TFunction) =>
+  z.object({
+    phone: z
+      .string()
+      .min(1, t('validation.required'))
+      .regex(phoneRegex, t('validation.phoneFormat')),
+    firstName: z.string().min(1, t('validation.required')).max(50, t('validation.nameTooLong')),
+    lastName: z.string().min(1, t('validation.required')).max(50, t('validation.nameTooLong')),
+    gender: z.enum(['male', 'female'], { message: t('validation.required') }),
+  })
 
-export const loanSchema = z.object({
-  amount: z
-    .number({ message: 'Amount is required' })
-    .int()
-    .min(200, 'Min $200')
-    .max(1000, 'Max $1000')
-    .refine((v) => v % 100 === 0, 'Step is $100'),
-  term: z
-    .number({ message: 'Term is required' })
-    .int('Whole days only')
-    .min(10, 'Min 10 days')
-    .max(30, 'Max 30 days'),
-})
+export const buildAddressSchema = (t: TFunction) =>
+  z.object({
+    workplace: z.string().min(1, t('validation.required')),
+    address: z.string().min(1, t('validation.required')).max(200, t('validation.nameTooLong')),
+  })
 
-// Inferring types straight from schemas — single source of truth
-export type PersonalInput = z.infer<typeof personalSchema>
-export type AddressInput = z.infer<typeof addressSchema>
-export type LoanInput = z.infer<typeof loanSchema>
+export const buildLoanSchema = (t: TFunction) =>
+  z.object({
+    amount: z
+      .number({ message: t('validation.required') })
+      .int()
+      .min(200, t('validation.amountMin'))
+      .max(1000, t('validation.amountMax'))
+      .refine((v) => v % 100 === 0, t('validation.amountStep')),
+    term: z
+      .number({ message: t('validation.required') })
+      .int(t('validation.termInt'))
+      .min(10, t('validation.termMin'))
+      .max(30, t('validation.termMax')),
+  })
+
+// Inferring types from one canonical instance — all locales share shape, so
+// any t works here.
+export type PersonalInput = z.infer<ReturnType<typeof buildPersonalSchema>>
+export type AddressInput = z.infer<ReturnType<typeof buildAddressSchema>>
+export type LoanInput = z.infer<ReturnType<typeof buildLoanSchema>>

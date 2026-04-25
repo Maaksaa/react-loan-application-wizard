@@ -1,22 +1,21 @@
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { Select } from '@/components/Select'
 import { useApplicationStore } from '@/store/applicationStore'
 import { formatPhone } from './phoneMask'
-import { personalSchema, type PersonalInput } from './schemas'
-
-const genderOptions = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-]
+import { buildPersonalSchema, type PersonalInput } from './schemas'
 
 export function PersonalForm() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const savedPersonal = useApplicationStore((s) => s.personal)
   const setPersonal = useApplicationStore((s) => s.setPersonal)
+  const schema = useMemo(() => buildPersonalSchema(t), [t])
 
   const {
     register,
@@ -24,16 +23,13 @@ export function PersonalForm() {
     control,
     formState: { errors, isSubmitting },
   } = useForm<PersonalInput>({
-    resolver: zodResolver(personalSchema),
-    // Preserve data on "Back" navigation — the key requirement from the task
+    resolver: zodResolver(schema),
     defaultValues: {
       phone: savedPersonal.phone ?? '',
       firstName: savedPersonal.firstName ?? '',
       lastName: savedPersonal.lastName ?? '',
       gender: savedPersonal.gender,
     },
-    // Validate only on submit + on change after first submit attempt.
-    // Better UX than onChange-from-start (no red errors while user is still typing).
     mode: 'onTouched',
   })
 
@@ -42,19 +38,20 @@ export function PersonalForm() {
     navigate('/address')
   }
 
+  const genderOptions = [
+    { value: 'male', label: t('personal.male') },
+    { value: 'female', label: t('personal.female') },
+  ]
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-      {/*
-        Phone is wrapped in Controller because we transform the value on change
-        (masking). register() alone wouldn't let us intercept the input cleanly.
-      */}
       <Controller
         name="phone"
         control={control}
         render={({ field, fieldState }) => (
           <Input
             {...field}
-            label="Phone"
+            label={t('personal.phone')}
             type="tel"
             inputMode="numeric"
             placeholder="0XXX XXX XXX"
@@ -66,29 +63,29 @@ export function PersonalForm() {
       />
 
       <Input
-        label="First name"
+        label={t('personal.firstName')}
         autoComplete="given-name"
         {...register('firstName')}
         error={errors.firstName?.message}
       />
 
       <Input
-        label="Last name"
+        label={t('personal.lastName')}
         autoComplete="family-name"
         {...register('lastName')}
         error={errors.lastName?.message}
       />
 
       <Select
-        label="Gender"
-        placeholder="Select gender"
+        label={t('personal.gender')}
+        placeholder={t('personal.genderPlaceholder')}
         options={genderOptions}
         {...register('gender')}
         error={errors.gender?.message}
       />
 
       <Button type="submit" disabled={isSubmitting} className="mt-2">
-        Next
+        {t('actions.next')}
       </Button>
     </form>
   )
