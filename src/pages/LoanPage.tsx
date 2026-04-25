@@ -35,7 +35,7 @@ export default function LoanPage() {
             lastName: personal.lastName,
             firstName: personal.firstName,
             amount: loan.amount,
-            term: loan.term,
+            count: loan.term,
           })}
         </Modal>
       </StepLayout>

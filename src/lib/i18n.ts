@@ -53,8 +53,10 @@ const resources = {
       },
       modal: {
         approvedTitle: 'Application approved',
-        approvedBody:
-          'Congratulations, {{lastName}} {{firstName}}. You are approved for ${{amount}} for {{term}} days.',
+        approvedBody_one:
+          'Congratulations, {{lastName}} {{firstName}}. You are approved for ${{amount}} for {{count}} day.',
+        approvedBody_other:
+          'Congratulations, {{lastName}} {{firstName}}. You are approved for ${{amount}} for {{count}} days.',
         startOver: 'Start over',
       },
       actions: {
@@ -117,8 +119,14 @@ const resources = {
       },
       modal: {
         approvedTitle: 'Заявка одобрена',
-        approvedBody:
-          'Поздравляем, {{lastName}} {{firstName}}. Вам одобрена сумма ${{amount}} на {{term}} дней.',
+        approvedBody_one:
+          'Поздравляем, {{lastName}} {{firstName}}. Вам одобрена сумма ${{amount}} на {{count}} день.',
+        approvedBody_few:
+          'Поздравляем, {{lastName}} {{firstName}}. Вам одобрена сумма ${{amount}} на {{count}} дня.',
+        approvedBody_many:
+          'Поздравляем, {{lastName}} {{firstName}}. Вам одобрена сумма ${{amount}} на {{count}} дней.',
+        approvedBody_other:
+          'Поздравляем, {{lastName}} {{firstName}}. Вам одобрена сумма ${{amount}} на {{count}} дней.',
         startOver: 'Начать заново',
       },
       actions: {
