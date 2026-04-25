@@ -49,9 +49,16 @@ export function AddressForm() {
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-sm">
         <p className="text-red-600">{t('address.loadError')}</p>
-        <Button variant="secondary" onClick={() => refetch()}>
-          {t('actions.retry')}
-        </Button>
+
+        <div className="flex w-full gap-3">
+          <Button variant="secondary" className="flex-1" onClick={() => navigate('/personal')}>
+            {t('actions.back')}
+          </Button>
+
+          <Button variant="secondary" className="flex-1" onClick={() => refetch()}>
+            {t('actions.retry')}
+          </Button>
+        </div>
       </div>
     )
   }

@@ -8,7 +8,7 @@ Three-step single-page loan application: personal data → address & workplace �
 |---------------|-----------------------------------------------|----------------------------------------------------------------------------------------------------|
 | Build tool    | Vite                                          | Fast HMR, modern, listed as acceptable in the job spec                                             |
 | Language      | TypeScript                                    | Required                                                                                           |
-| UI            | React 18 + React Router v6                    | Required                                                                                           |
+| UI            | React 19 + React Router v7                    | Required                                                                                           |
 | Styling       | Tailwind CSS v4                               | Listed in the spec; v4 has zero-config setup with a Vite plugin                                    |
 | State         | Zustand                                       | Minimal, no boilerplate; sufficient for 3 form steps. Redux would be overkill here                 |
 | Forms         | React Hook Form + Zod (`@hookform/resolvers`) | RHF required by spec; Zod gives one schema for both runtime validation and TS types                |
@@ -48,12 +48,14 @@ src/
 ├── components/           # generic, reusable UI (Input, Select, Button, Modal, …)
 ├── features/
 │   └── application-form/ # everything specific to the 3-step form
-│       ├── Form.tsx      # one component per step
-│       ├── schemas.ts    # Zod schemas (i18n-aware)
-│       ├── phoneMask.ts  # custom phone formatting
-│       ├── StepGuard.tsx # blocks deep-linking past unfilled steps
-│       └── use.ts        # query/mutation hooks
-├── hooks/
+│       ├── PersonalForm.tsx
+│       ├── AddressForm.tsx
+│       ├── LoanForm.tsx
+│       ├── schemas.ts
+│       ├── phoneMask.ts
+│       ├── StepGuard.tsx
+│       ├── useCategories.ts
+│       └── useSubmitApplication.ts
 ├── lib/                  # cn(), queryClient, i18n setup
 ├── pages/                # route-level shells
 ├── store/                # Zustand store

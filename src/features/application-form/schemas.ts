@@ -15,15 +15,27 @@ export const buildPersonalSchema = (t: TFunction) =>
       .string()
       .min(1, t('validation.required'))
       .regex(phoneRegex, t('validation.phoneFormat')),
-    firstName: z.string().min(1, t('validation.required')).max(50, t('validation.nameTooLong')),
-    lastName: z.string().min(1, t('validation.required')).max(50, t('validation.nameTooLong')),
+    firstName: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .max(50, t('validation.nameTooLong')),
+    lastName: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .max(50, t('validation.nameTooLong')),
     gender: z.enum(['male', 'female'], { message: t('validation.required') }),
   })
 
 export const buildAddressSchema = (t: TFunction) =>
   z.object({
     workplace: z.string().min(1, t('validation.required')),
-    address: z.string().min(1, t('validation.required')).max(200, t('validation.nameTooLong')),
+    address: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .max(200, t('validation.nameTooLong')),
   })
 
 export const buildLoanSchema = (t: TFunction) =>
