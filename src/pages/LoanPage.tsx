@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from '@/components/Modal'
+import { StepLayout } from '@/components/StepLayout'
 import { LoanForm } from '@/features/application-form/LoanForm'
 import { StepGuard } from '@/features/application-form/StepGuard'
 import { useApplicationStore } from '@/store/applicationStore'
@@ -19,10 +20,11 @@ export default function LoanPage() {
 
   return (
     <StepGuard requires="loan">
-      <div className="mx-auto w-full max-w-md p-6">
-        <p className="mb-2 text-sm text-slate-500">Step 3 of 3</p>
-        <h1 className="mb-6 text-2xl font-semibold text-slate-900">Loan parameters</h1>
-
+      <StepLayout
+        step={3}
+        title="Loan parameters"
+        subtitle="Choose the amount and term that suit you"
+      >
         <LoanForm onSuccess={() => setModalOpen(true)} />
 
         <Modal
@@ -39,7 +41,7 @@ export default function LoanPage() {
           <span className="font-semibold">${loan.amount}</span> for{' '}
           <span className="font-semibold">{loan.term} days</span>.
         </Modal>
-      </div>
+      </StepLayout>
     </StepGuard>
   )
 }

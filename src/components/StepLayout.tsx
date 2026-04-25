@@ -1,0 +1,28 @@
+import type { ReactNode } from 'react'
+import { StepIndicator } from './StepIndicator'
+
+interface StepLayoutProps {
+  step: 1 | 2 | 3
+  title: string
+  subtitle?: string
+  children: ReactNode
+}
+
+export function StepLayout({ step, title, subtitle, children }: StepLayoutProps) {
+  return (
+    <div className="min-h-screen bg-slate-50 py-10">
+      <div className="mx-auto w-full max-w-md px-4">
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/60 sm:p-8">
+          <StepIndicator current={step} />
+          <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
+          {subtitle && <p className="mt-1 mb-6 text-sm text-slate-500">{subtitle}</p>}
+          {!subtitle && <div className="mb-6" />}
+          {children}
+        </div>
+        <p className="mt-4 text-center text-xs text-slate-400">
+          Wiam Group · Test loan application
+        </p>
+      </div>
+    </div>
+  )
+}
