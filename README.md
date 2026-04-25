@@ -2,6 +2,8 @@
 
 Three-step single-page loan application: personal data → address & workplace → loan parameters, with validation, API integration and a result modal.
 
+**Live demo:** https://react-loan-application-wizard.vercel.app/
+
 ## Stack & rationale
 
 | Concern       | Choice                                        | Why                                                                                                |
